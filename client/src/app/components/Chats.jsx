@@ -2,13 +2,13 @@
 import React, { use, useEffect, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import GetUserName from './GetUserName'
-const socket = io("http://localhost:5000")
+const socket = io("https://chat-app-7978.vercel.app")
 const Chats = () => {
     const [massage, setMassage] = useState("")
     const [massages, setMassages] = useState([])
     const [userName, setUserName] = useState("")
     const messagesEndRef = useRef(null);
-    const sendMassage = (e) => {
+    const sendMassage = async (e) => {
         e.preventDefault()
         socket.emit("massage", {
             massage,

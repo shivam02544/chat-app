@@ -3,7 +3,7 @@ const server = require("http").createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000", // React frontend URL
+    origin: "https://chat-app-seven-xi-22.vercel.app", // React frontend URL
     methods: ["GET", "POST"],
   },
 });
