@@ -2,7 +2,7 @@
 import React, { use, useEffect, useRef, useState } from 'react'
 import { io } from 'socket.io-client'
 import GetUserName from './GetUserName'
-const socket = io("https://chat-app-7978.vercel.app")
+const socket = io("https://chat-app-9yq9.onrender.com/")
 const Chats = () => {
     const [massage, setMassage] = useState("")
     const [massages, setMassages] = useState([])
