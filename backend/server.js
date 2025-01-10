@@ -16,6 +16,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("user joined", (userName) => {
+    socket.userName = userName;
     const joinMessage = {
       userName,
       message: `${userName} has joined the chat`,
@@ -28,14 +29,16 @@ io.on("connection", (socket) => {
   socket.on("typing", (userName) => {
     socket.broadcast.emit("typing", userName);
   });
-});
-socket.on("disconnect", (userName) => {
-  const disConnect = {
-    userName: "system",
-    message: `${userName} has left the chat`,
-    time: new Date().toLocaleString(),
-  };
-  io.emit("message", disConnect);
+
+  socket.on("disconnect", () => {
+    const userName = socket.userName;
+    const disConnect = {
+      userName: "system",
+      message: `${userName} has left the chat`,
+      time: new Date().toLocaleString(),
+    };
+    io.emit("message", disConnect);
+  });
 });
 
 server.listen(5000, () => {

@@ -1,5 +1,6 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
+import { useRouter } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { io } from "socket.io-client";
@@ -11,7 +12,7 @@ const Chats = () => {
     const messagesEndRef = useRef(null);
     const socket = useRef(null);
     const [isTyping, setIsTyping] = useState(false);
-
+    const router = useRouter();
     useEffect(() => {
         setUserName(localStorage.getItem("username"))
     }, [])
@@ -75,7 +76,9 @@ const Chats = () => {
             localStorage.removeItem("username");
             socket.current.disconnect(userName);
             setUserName("");
+            router.push("/login")
             toast.success("User loged out sucessfully...")
+
         } catch (error) {
             toast.error("Logout failed:", error);
         }
@@ -83,7 +86,7 @@ const Chats = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen max-h-screen bg-gray-100">
-            <div className="w-full bg-white shadow-md p-4 rounded-lg">
+            <div className="w-full bg-white shadow-md p-4 rounded-lg flex justify-between">
                 <h1 className="text-center text-2xl font-bold text-gray-800">Chat Room</h1>
                 <button
                     onClick={handleLogout}
