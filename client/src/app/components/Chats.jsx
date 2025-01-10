@@ -13,6 +13,8 @@ const Chats = () => {
     const socket = useRef(null);
     const [isTyping, setIsTyping] = useState(false);
     const router = useRouter();
+    const [typingUser, setTypingUser] = useState("");
+
     useEffect(() => {
         setUserName(localStorage.getItem("username"))
     }, [])
@@ -28,7 +30,8 @@ const Chats = () => {
             // }
         });
         socket.current.on("typing", (userName) => {
-            console.log(`${userName} is typing...`);
+            setTypingUser(userName);
+            setTimeout(() => setTypingUser(""), 3000);
         });
         return () => {
             socket.current.disconnect();
@@ -95,6 +98,9 @@ const Chats = () => {
                     Logout
                 </button>
             </div>
+            {typingUser && (
+                <div className="text-gray-500 mb-2 w-full text-center">{typingUser} is typing...</div>
+            )}
             <div className="flex flex-col gap-2 bg-white max-w-[90%] md:max-w-[32rem] p-4 rounded-xl border border-gray-300 shadow-lg h-screen overflow-hidden">
                 <div className="flex-1 overflow-y-auto">
                     <AnimatePresence>

@@ -18,7 +18,7 @@ io.on("connection", (socket) => {
   socket.on("user joined", (userName) => {
     socket.userName = userName;
     const joinMessage = {
-      userName,
+      userName: "System",
       message: `${userName} has joined the chat`,
       time: new Date().toLocaleString(),
     };
