@@ -83,17 +83,17 @@ const Chats = () => {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen max-h-screen bg-gray-100">
-            <div className="w-full bg-white shadow-md p-4">
+            <div className="w-full bg-white shadow-md p-4 rounded-lg">
                 <h1 className="text-center text-2xl font-bold text-gray-800">Chat Room</h1>
                 <button
                     onClick={handleLogout}
-                    className="mt-2 bg-red-500 px-4 py-2 rounded-md text-white text-lg focus:outline-none"
+                    className="mt-2 bg-red-500 px-4 py-2 rounded-md text-white text-lg focus:outline-none transition duration-300 ease-in-out transform hover:scale-105"
                 >
                     Logout
                 </button>
             </div>
-            <div className="py- flex flex-col gap-2 bg-white max-w-[90%] md:max-w-[32rem] p-4 rounded-xl border border-gray-300 shadow-lg h-screen">
-                <div className="flex-1 overflow-y-scroll">
+            <div className="flex flex-col gap-2 bg-white max-w-[90%] md:max-w-[32rem] p-4 rounded-xl border border-gray-300 shadow-lg h-screen overflow-hidden">
+                <div className="flex-1 overflow-y-auto">
                     <AnimatePresence>
                         {messages.map((msg, index) => {
                             const isSentByUser = msg.userName === userName;
@@ -136,7 +136,7 @@ const Chats = () => {
                     />
                     <button
                         type="submit"
-                        className="bg-blue-500 px-4 py-2 rounded-md text-white text-lg focus:outline-none"
+                        className="bg-blue-500 px-4 py-2 rounded-md text-white text-lg focus:outline-none transition duration-300 ease-in-out transform hover:scale-105"
                     >
                         Send
                     </button>
