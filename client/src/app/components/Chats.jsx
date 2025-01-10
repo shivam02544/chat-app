@@ -1,6 +1,7 @@
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 import { io } from "socket.io-client";
 
 const Chats = () => {
@@ -60,6 +61,26 @@ const Chats = () => {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            const res = await fetch("/api/logout", {
+                method: "DELETE",
+
+            });
+            if (!res.ok) {
+                toast.error("Somthing went wrong")
+                return
+            }
+
+            localStorage.removeItem("username");
+            socket.current.disconnect(userName);
+            setUserName("");
+            toast.success("User loged out sucessfully...")
+        } catch (error) {
+            toast.error("Logout failed:", error);
+        }
+    };
+
     return (
         <div className="flex items-center justify-center min-h-screen max-h-screen bg-gray-100">
             <div className="py- flex flex-col gap-2 bg-white max-w-[90%] md:max-w-[32rem] p-4 rounded-xl border border-gray-300 shadow-lg h-screen">
@@ -112,6 +133,12 @@ const Chats = () => {
                         Send
                     </button>
                 </form>
+                <button
+                    onClick={handleLogout}
+                    className="mt-4 bg-red-500 px-4 py-2 rounded-md text-white text-lg focus:outline-none"
+                >
+                    Logout
+                </button>
             </div>
         </div>
     );

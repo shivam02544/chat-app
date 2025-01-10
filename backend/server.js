@@ -29,6 +29,15 @@ io.on("connection", (socket) => {
     socket.broadcast.emit("typing", userName);
   });
 });
+socket.on("disconnect", (userName) => {
+  const disConnect = {
+    userName: "system",
+    message: `${userName} has left the chat`,
+    time: new Date().toLocaleString(),
+  };
+  io.emit("message", disConnect);
+});
+
 server.listen(5000, () => {
   console.log("Server is started on port 5000");
 });
