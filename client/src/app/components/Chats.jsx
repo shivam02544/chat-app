@@ -21,10 +21,10 @@ const Chats = () => {
         socket.current.on("message", (msg) => {
             console.log(msg);
             setMessages((prevMessages) => [...prevMessages, msg]);
-            if (msg.userName != userName) {
-                const audio = new Audio("/notification.mp3");
-                audio.play();
-            }
+            // if (msg.userName != userName) {
+            //     const audio = new Audio("/notification.mp3");
+            //     audio.play();
+            // }
         });
         socket.current.on("typing", (userName) => {
             console.log(`${userName} is typing...`);
@@ -82,9 +82,17 @@ const Chats = () => {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen max-h-screen bg-gray-100">
-            <div className="py- flex flex-col gap-2 bg-white max-w-[90%] md:max-w-[32rem] p-4 rounded-xl border border-gray-300 shadow-lg h-screen">
+        <div className="flex flex-col items-center justify-center min-h-screen max-h-screen bg-gray-100">
+            <div className="w-full bg-white shadow-md p-4">
                 <h1 className="text-center text-2xl font-bold text-gray-800">Chat Room</h1>
+                <button
+                    onClick={handleLogout}
+                    className="mt-2 bg-red-500 px-4 py-2 rounded-md text-white text-lg focus:outline-none"
+                >
+                    Logout
+                </button>
+            </div>
+            <div className="py- flex flex-col gap-2 bg-white max-w-[90%] md:max-w-[32rem] p-4 rounded-xl border border-gray-300 shadow-lg h-screen">
                 <div className="flex-1 overflow-y-scroll">
                     <AnimatePresence>
                         {messages.map((msg, index) => {
@@ -133,12 +141,6 @@ const Chats = () => {
                         Send
                     </button>
                 </form>
-                <button
-                    onClick={handleLogout}
-                    className="mt-4 bg-red-500 px-4 py-2 rounded-md text-white text-lg focus:outline-none"
-                >
-                    Logout
-                </button>
             </div>
         </div>
     );
