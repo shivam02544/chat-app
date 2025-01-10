@@ -13,7 +13,7 @@ const Page = () => {
     const [loading, setLoading] = React.useState(false);
 
     async function sendOtp(email) {
-        const res = await fetch(`/api/emailSender?email=${email}`)
+        const res = await fetch(`/api/emailSender?email=${email}&type=signup`)
         const data = await res.json();
         if (!res.ok) {
             toast.error(data.message);

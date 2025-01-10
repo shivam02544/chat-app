@@ -1,19 +1,51 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react'
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
+import jwt from 'jsonwebtoken'
+import { io } from "socket.io-client";
 const variants = {
     hidden: { opacity: 0, x: -100 },
     visible: { opacity: 1, x: 0 },
 };
 
 const Page = () => {
+    const router = useRouter()
+    const [loading, setLoading] = useState(false);
+
     async function handleSubmitLoginForm(e) {
         e.preventDefault();
+        setLoading(true);
         const formData = new FormData(e.target);
         const formObject = Object.fromEntries(formData.entries());
-        console.log(formObject);
+        const res = await fetch(`/api/userData?email=${formObject.username}&password=${formObject.password}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'applicatiofn/json',
+            },
+
+        });
+        const data = await res.json();
+        setLoading(false);
+        if (!res.ok) {
+            toast.error(data.message);
+            return;
+        }
+        const token = data.token;
+        if (token) {
+            localStorage.setItem('token', token);
+            let decode = jwt.decode(token)
+            localStorage.setItem('username', decode.userName)
+            const socket = io("https://chat-app-9yq9.onrender.com/");
+            socket.emit("user joined", decode.userName);
+            router.push("/")
+        } else {
+            router.push('Login failed. Please check your credentials.');
+            setLoading(false)
+            return
+        }
         e.target.reset();
 
     }
@@ -68,9 +100,10 @@ const Page = () => {
                         />
                         <motion.input
                             type="submit"
-                            value="Login"
-                            className="cursor-pointer mt-4 w-full bg-blue-500 text-white font-bold py-2 rounded hover:bg-blue-600"
-                            whileHover={{ scale: 1.1 }}
+                            value={loading ? "Loading..." : "Login"}
+                            disabled={loading}
+                            className={`cursor-pointer mt-4 w-full ${loading ? 'bg-gray-400' : 'bg-blue-500'} text-white font-bold py-2 rounded hover:bg-blue-600`}
+                            whileHover={!loading ? { scale: 1.1 } : {}}
                             transition={{ type: "spring", stiffness: 300 }}
                         />
                     </form>

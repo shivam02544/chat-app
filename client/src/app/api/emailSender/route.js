@@ -9,16 +9,29 @@ export const GET = async (request) => {
   try {
     const { searchParams } = new URL(request.url);
     const email = searchParams.get("email");
+    const type = searchParams.get("type");
     await connectDb();
     const user = await Users.findOne({ email: email });
-    if (user) {
-      return NextResponse.json(
-        {
-          message: "Email is already registered.",
-        },
-        { status: 409 }
-      );
+    if (type == "signup") {
+      if (user) {
+        return NextResponse.json(
+          {
+            message: "Email is already registered.",
+          },
+          { status: 409 }
+        );
+      }
+    } else {
+      if (!user) {
+        return NextResponse.json(
+          {
+            message: "Email is not registered.",
+          },
+          { status: 404 }
+        );
+      }
     }
+
     const otp = generateOtp();
     const transporter = nodemailer.createTransport({
       service: "gmail",
